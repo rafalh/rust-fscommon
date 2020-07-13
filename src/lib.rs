@@ -1,5 +1,4 @@
-#[cfg(not(feature = "std"))]
-extern crate core;
+#![cfg_attr(not(feature = "std"), no_std)]
 
 #[cfg(not(feature = "std"))]
 extern crate core_io;
@@ -13,7 +12,7 @@ use core_io as io;
 #[cfg(feature = "std")]
 use std as core;
 #[cfg(feature = "std")]
-use std::io as io;
+use std::io;
 
 mod buf_stream;
 mod stream_slice;
