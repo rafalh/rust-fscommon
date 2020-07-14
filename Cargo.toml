@@ -1,6 +1,6 @@
 [package]
 name = "fscommon"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Rafał Harabień <rafalh1992@o2.pl>"]
 repository = "https://github.com/rafalh/rust-fscommon"
 readme = "README.md"
