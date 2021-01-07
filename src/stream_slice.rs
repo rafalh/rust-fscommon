@@ -26,6 +26,11 @@ impl <T: Read + Write + Seek> StreamSlice<T> {
             current_offset: 0,
         })
     }
+
+    /// Returns inner object
+    pub fn into_inner(self) -> T {
+        self.inner
+    }
 }
 
 impl <T: Read + Write + Seek> Read for StreamSlice<T> {

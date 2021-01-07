@@ -29,6 +29,13 @@ impl<T: Read+Write+Seek> BufStream<T> {
         }
     }
 
+    /// Returns inner object
+    pub fn into_inner(mut self) -> io::Result<T> {
+        self.flush()?;
+        let md = std::mem::ManuallyDrop::new(self);
+        Ok(unsafe { core::ptr::read(&md.inner) })
+    }
+
     fn flush_buf(&mut self) -> io::Result<()> {
         if self.write {
             self.inner.write_all(&self.buf[..self.pos])?;
