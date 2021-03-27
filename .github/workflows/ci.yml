@@ -50,3 +50,4 @@ jobs:
         with:
           command: build
           args: --no-default-features --features core_io
+        if: ${{ matrix.rust_version == 'nightly-2018-03-07' }}
