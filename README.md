@@ -5,7 +5,7 @@ Rust FS Common
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE.txt)
 [![crates.io](https://img.shields.io/crates/v/fscommon)](https://crates.io/crates/fscommon)
 [![Documentation](https://docs.rs/fscommon/badge.svg)](https://docs.rs/fscommon)
-[![Minimum rustc version](https://img.shields.io/badge/rustc-1.24+-yellow.svg)](https://blog.rust-lang.org/2018/02/15/Rust-1.24.html)
+[![Minimum rustc version](https://img.shields.io/badge/rustc-1.36+-yellow.svg)](https://blog.rust-lang.org/2019/07/04/Rust-1.36.0.html)
 
 Filesystem common utilities.
 
