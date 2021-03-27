@@ -34,6 +34,9 @@ jobs:
           profile: minimal
           toolchain: ${{ matrix.rust_version }}
 
+      - name: Print Rust compiler version
+        run: cargo rustc -- --version
+
       - name: Run cargo build
         uses: actions-rs/cargo@v1
         with:
