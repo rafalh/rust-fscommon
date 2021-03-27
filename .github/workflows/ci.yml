@@ -14,10 +14,11 @@ jobs:
             run_tests: true
           - rust_version: nightly
             run_tests: true
-          - rust_version: nightly-2018-03-07
+          # core_io compatible rustc version
+          - rust_version: nightly-2019-07-01
             run_tests: true
           # Minimal supported rustc version
-          - rust_version: 1.24.0
+          - rust_version: 1.36.0
             run_tests: false
     runs-on: ubuntu-latest
     continue-on-error: ${{ matrix.rust_version == 'nightly' }}
@@ -33,6 +34,10 @@ jobs:
         with:
           profile: minimal
           toolchain: ${{ matrix.rust_version }}
+          override: true
+
+      - name: Print Rust compiler version
+        run: rustc --version
 
       - name: Run cargo build
         uses: actions-rs/cargo@v1
