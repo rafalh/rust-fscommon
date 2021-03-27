@@ -1,0 +1,52 @@
+on: [push, pull_request]
+
+name: CI
+
+jobs:
+  check:
+    name: Build
+    strategy:
+      matrix:
+        include:
+          - rust_version: stable
+            run_tests: true
+          - rust_version: beta
+            run_tests: true
+          - rust_version: nightly
+            run_tests: true
+          - rust_version: nightly-2018-03-07
+            run_tests: true
+          # Minimal supported rustc version
+          - rust_version: 1.24.0
+            run_tests: false
+    runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.rust_version == 'nightly' }}
+    env:
+      RUST_LOG: warn
+      RUST_BACKTRACE: 1
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+
+      - name: Install toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: ${{ matrix.rust_version }}
+
+      - name: Run cargo build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+
+      - name: Run cargo test
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+        if: ${{ matrix.run_tests }}
+
+      - name: Run cargo build - no_std
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --no-default-features --features core_io
