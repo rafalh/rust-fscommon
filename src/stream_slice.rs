@@ -11,9 +11,9 @@ pub struct StreamSlice<T: Read + Write + Seek> {
     size: u64,
 }
 
-impl <T: Read + Write + Seek> StreamSlice<T> {
+impl<T: Read + Write + Seek> StreamSlice<T> {
     /// Creates new `StreamSlice` from inner stream and offset range.
-    /// 
+    ///
     /// `start_offset` is inclusive offset of the first accessible byte.
     /// `end_offset` is exclusive offset of the first non-accessible byte.
     /// `start_offset` must be lower or equal to `end_offset`.
@@ -22,7 +22,9 @@ impl <T: Read + Write + Seek> StreamSlice<T> {
         inner.seek(io::SeekFrom::Start(start_offset))?;
         let size = end_offset - start_offset;
         Ok(StreamSlice {
-            start_offset, size, inner,
+            start_offset,
+            size,
+            inner,
             current_offset: 0,
         })
     }
@@ -33,7 +35,7 @@ impl <T: Read + Write + Seek> StreamSlice<T> {
     }
 }
 
-impl <T: Read + Write + Seek> Read for StreamSlice<T> {
+impl<T: Read + Write + Seek> Read for StreamSlice<T> {
     fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
         let max_read_size = cmp::min((self.size - self.current_offset) as usize, buf.len());
         let bytes_read = self.inner.read(&mut buf[..max_read_size])?;
@@ -42,7 +44,7 @@ impl <T: Read + Write + Seek> Read for StreamSlice<T> {
     }
 }
 
-impl <T: Read + Write + Seek> Write for StreamSlice<T> {
+impl<T: Read + Write + Seek> Write for StreamSlice<T> {
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         let max_write_size = cmp::min((self.size - self.current_offset) as usize, buf.len());
         let bytes_written = self.inner.write(&buf[..max_write_size])?;
@@ -55,7 +57,7 @@ impl <T: Read + Write + Seek> Write for StreamSlice<T> {
     }
 }
 
-impl <T: Read + Write + Seek> Seek for StreamSlice<T> {
+impl<T: Read + Write + Seek> Seek for StreamSlice<T> {
     fn seek(&mut self, pos: io::SeekFrom) -> io::Result<u64> {
         let new_offset = match pos {
             io::SeekFrom::Current(x) => self.current_offset as i64 + x,
@@ -65,7 +67,8 @@ impl <T: Read + Write + Seek> Seek for StreamSlice<T> {
         if new_offset < 0 || new_offset as u64 > self.size {
             Err(io::Error::new(io::ErrorKind::InvalidInput, "invalid seek"))
         } else {
-            self.inner.seek(io::SeekFrom::Start(self.start_offset + new_offset as u64))?;
+            self.inner
+                .seek(io::SeekFrom::Start(self.start_offset + new_offset as u64))?;
             self.current_offset = new_offset as u64;
             Ok(self.current_offset)
         }
@@ -79,7 +82,7 @@ mod tests {
     fn it_works() {
         let buf = "BeforeTest dataAfter".to_string().into_bytes();
         let cur = io::Cursor::new(buf);
-        let mut stream = StreamSlice::new(cur, 6, 6+9).unwrap();
+        let mut stream = StreamSlice::new(cur, 6, 6 + 9).unwrap();
 
         let mut data = String::new();
         stream.read_to_string(&mut data).unwrap();
