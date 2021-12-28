@@ -6,7 +6,7 @@ const BUF_SIZE: usize = 512;
 
 /// The `BufStream` struct adds buffering to underlying file or device.
 ///
-/// It is basically composition of `BufReader` and `BufWritter`.
+/// It is basically composition of `BufReader` and `BufWriter`.
 /// Buffer size is fixed to 512 to avoid dynamic allocation.
 /// `BufStream` automatically flushes itself when being dropped.
 pub struct BufStream<T: Read + Write + Seek> {
@@ -54,7 +54,7 @@ impl<T: Read + Write + Seek> BufStream<T> {
         Ok(())
     }
 
-    fn make_writter(&mut self) -> io::Result<()> {
+    fn make_writer(&mut self) -> io::Result<()> {
         if !self.write {
             self.inner
                 .seek(io::SeekFrom::Current(-(self.len as i64 - self.pos as i64)))?;
@@ -111,7 +111,7 @@ impl<T: Read + Write + Seek> Read for BufStream<T> {
 impl<T: Read + Write + Seek> Write for BufStream<T> {
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         // Make sure we are in write mode
-        self.make_writter()?;
+        self.make_writer()?;
         if self.pos + buf.len() > BUF_SIZE {
             self.flush_buf()?;
             if buf.len() >= BUF_SIZE {
