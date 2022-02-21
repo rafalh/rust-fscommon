@@ -1,4 +1,6 @@
 use core::cmp;
+use core::mem;
+use core::ptr;
 use io;
 use io::prelude::*;
 
@@ -32,8 +34,8 @@ impl<T: Read + Write + Seek> BufStream<T> {
     /// Returns inner object
     pub fn into_inner(mut self) -> io::Result<T> {
         self.flush()?;
-        let md = std::mem::ManuallyDrop::new(self);
-        Ok(unsafe { core::ptr::read(&md.inner) })
+        let md = mem::ManuallyDrop::new(self);
+        Ok(unsafe { ptr::read(&md.inner) })
     }
 
     fn flush_buf(&mut self) -> io::Result<()> {
