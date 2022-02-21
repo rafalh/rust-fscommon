@@ -36,12 +36,6 @@ jobs:
           toolchain: ${{ matrix.rust_version }}
           override: true
 
-      - name: Print Rust compiler version
-        run: rustc --version
-
-      - name: Print Rust compiler version
-        run: cargo rustc -- --version
-
       - name: Run cargo build
         uses: actions-rs/cargo@v1
         with:
