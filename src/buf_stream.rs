@@ -1,8 +1,8 @@
+use crate::io;
+use crate::io::prelude::*;
 use core::cmp;
 use core::mem;
 use core::ptr;
-use io;
-use io::prelude::*;
 
 const BUF_SIZE: usize = 512;
 

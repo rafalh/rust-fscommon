@@ -10,8 +10,6 @@ extern crate log;
 use core_io as io;
 
 #[cfg(feature = "std")]
-use std as core;
-#[cfg(feature = "std")]
 use std::io;
 
 mod buf_stream;

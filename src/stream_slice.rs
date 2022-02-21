@@ -1,6 +1,6 @@
+use crate::io;
+use crate::io::prelude::*;
 use core::cmp;
-use io;
-use io::prelude::*;
 
 /// Stream wrapper for accessing limited segment of data from underlying file or device.
 #[derive(Clone)]

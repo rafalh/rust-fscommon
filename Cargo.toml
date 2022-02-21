@@ -2,6 +2,7 @@
 name = "fscommon"
 version = "0.1.1"
 authors = ["Rafał Harabień <rafalh92@outlook.com>"]
+edition = "2018"
 repository = "https://github.com/rafalh/rust-fscommon"
 readme = "README.md"
 keywords = ["filesystem", "no_std"]
