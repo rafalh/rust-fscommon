@@ -15,7 +15,7 @@ jobs:
           - rust_version: nightly
             run_tests: true
           # core_io compatible rustc version
-          - rust_version: nightly-2019-07-01
+          - rust_version: nightly-2021-03-25
             run_tests: true
           # Minimal supported rustc version
           - rust_version: 1.36.0
@@ -58,4 +58,4 @@ jobs:
         with:
           command: build
           args: --no-default-features --features core_io
-        if: ${{ matrix.rust_version == 'nightly-2018-03-07' }}
+        if: ${{ matrix.rust_version == 'nightly-2021-03-25' }}
