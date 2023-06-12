@@ -4,14 +4,14 @@ use core::cmp;
 
 /// Stream wrapper for accessing limited segment of data from underlying file or device.
 #[derive(Clone)]
-pub struct StreamSlice<T: Read + Write + Seek> {
+pub struct StreamSlice<T: Seek> {
     inner: T,
     start_offset: u64,
     current_offset: u64,
     size: u64,
 }
 
-impl<T: Read + Write + Seek> StreamSlice<T> {
+impl<T: Seek> StreamSlice<T> {
     /// Creates new `StreamSlice` from inner stream and offset range.
     ///
     /// `start_offset` is inclusive offset of the first accessible byte.
@@ -35,7 +35,10 @@ impl<T: Read + Write + Seek> StreamSlice<T> {
     }
 }
 
-impl<T: Read + Write + Seek> Read for StreamSlice<T> {
+impl<T: Seek> Read for StreamSlice<T>
+where
+    T: Read,
+{
     fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
         let max_read_size = cmp::min((self.size - self.current_offset) as usize, buf.len());
         let bytes_read = self.inner.read(&mut buf[..max_read_size])?;
@@ -44,7 +47,7 @@ impl<T: Read + Write + Seek> Read for StreamSlice<T> {
     }
 }
 
-impl<T: Read + Write + Seek> Write for StreamSlice<T> {
+impl<T: Write + Seek> Write for StreamSlice<T> {
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         let max_write_size = cmp::min((self.size - self.current_offset) as usize, buf.len());
         let bytes_written = self.inner.write(&buf[..max_write_size])?;
@@ -57,7 +60,7 @@ impl<T: Read + Write + Seek> Write for StreamSlice<T> {
     }
 }
 
-impl<T: Read + Write + Seek> Seek for StreamSlice<T> {
+impl<T: Seek> Seek for StreamSlice<T> {
     fn seek(&mut self, pos: io::SeekFrom) -> io::Result<u64> {
         let new_offset = match pos {
             io::SeekFrom::Current(x) => self.current_offset as i64 + x,
